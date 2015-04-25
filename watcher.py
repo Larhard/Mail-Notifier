@@ -6,14 +6,21 @@ import mailbox
 
 class MailEventHandler(pyinotify.ProcessEvent):
     def my_init(self, maildir):
+        self.new_mails = set()
+
         self.maildir = mailbox.Maildir(maildir)
         assert self.maildir is not None
 
-    def process_IN_MOVED_TO(self, event):
-        self.new_mail_notify(event.name)
+        self.pevent = lambda event: not re.match('.*:.*', event.name)
 
     def process_IN_CREATE(self, event):
-        self.new_mail_notify(event.name)
+        self.new_mails.add(event.name)
+
+    def process_IN_CLOSE_WRITE(self, event):
+        if event.name in self.new_mails:
+            self.new_mails.remove(event.name)
+
+            self.new_mail_notify(event.name)
 
     def new_mail_notify(self, mail_path):
         mail_id, *_ = mail_path.split(':')
@@ -31,6 +38,6 @@ def watch_maildir(maildir):
     handler = MailEventHandler(maildir=maildir)
     notifier = pyinotify.Notifier(watch_manager, handler)
 
-    watch_manager.add_watch(maildir, pyinotify.IN_CREATE | pyinotify.IN_MOVED_TO, rec=True)
+    watch_manager.add_watch(maildir, pyinotify.IN_CREATE | pyinotify.IN_CLOSE_WRITE, rec=True)
 
     notifier.loop()
