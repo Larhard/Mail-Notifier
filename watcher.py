@@ -6,7 +6,7 @@ import mailbox
 
 
 def decode_header(header):
-    return ''.join(bytes.decode(k[0], k[1] or 'ascii') for k in email.header.decode_header(header))
+    return ''.join((k[0] if k[1] is None else bytes.decode(k[0], k[1])) for k in email.header.decode_header(header))
 
 
 class MailEventHandler(pyinotify.ProcessEvent):
