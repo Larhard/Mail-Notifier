@@ -2,6 +2,7 @@
 
 import argparse
 import sys
+import os
 
 import watcher
 import config
@@ -13,7 +14,8 @@ def main(argv):
     parser.add_argument('--config', '-c', help="configuration file")
     args = parser.parse_args(argv)
 
-    config.override('default_config')
+    basedir = os.path.dirname(__file__)
+    config.override(os.path.join(basedir, 'default_config'))
     if args.config:
         config.override(args.config)
 
