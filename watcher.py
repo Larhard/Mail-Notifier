@@ -35,7 +35,7 @@ class MailEventHandler(pyinotify.ProcessEvent):
         mail_from = decode_header(mail.get('From'))
         mail_subject = decode_header(mail.get('Subject'))
 
-        notify.send('new_mail', 'From: {}\nSubject: {}'.format(mail_from, mail_subject))
+        notify.send('New Mail', 'From: {}\nSubject: {}'.format(mail_from, mail_subject))
 
 
 def watch_maildir(maildir):
