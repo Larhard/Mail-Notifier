@@ -3,6 +3,8 @@ import imp
 __old_globals = None
 __old_globals = set(globals().keys())
 
+sounds = None
+sound_cmd = None
 
 CONFIG_VARS = globals().keys() - __old_globals
 
