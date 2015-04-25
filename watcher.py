@@ -1,7 +1,12 @@
+import email.header
 import pyinotify
 import re
 import notify
 import mailbox
+
+
+def decode_header(header):
+    return ''.join(bytes.decode(k[0], k[1] or 'ascii') for k in email.header.decode_header(header))
 
 
 class MailEventHandler(pyinotify.ProcessEvent):
@@ -27,7 +32,10 @@ class MailEventHandler(pyinotify.ProcessEvent):
         mail = self.maildir.get(mail_id)
         assert mail is not None
 
-        notify.send('new_mail', 'From: {}\nSubject: {}'.format(mail.get('From'), mail.get('Subject')))
+        mail_from = decode_header(mail.get('From'))
+        mail_subject = decode_header(mail.get('Subject'))
+
+        notify.send('new_mail', 'From: {}\nSubject: {}'.format(mail_from, mail_subject))
 
 
 def watch_maildir(maildir):
