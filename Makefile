@@ -11,6 +11,8 @@ TARGETS = \
 	mail_notify.py \
 	notify.py \
 	watcher.py \
+	config.py \
+	default_config \
 
 EXECUTABLES = \
 	maildir-notifier.sh \
