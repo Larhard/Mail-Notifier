@@ -7,6 +7,7 @@ import mailbox
 class MailEventHandler(pyinotify.ProcessEvent):
     def my_init(self, maildir):
         self.maildir = mailbox.Maildir(maildir)
+        assert self.maildir is not None
 
     def process_IN_MOVED_TO(self, event):
         self.new_mail_notify(event.name)
@@ -17,6 +18,8 @@ class MailEventHandler(pyinotify.ProcessEvent):
     def new_mail_notify(self, mail_path):
         mail_id, *_ = mail_path.split(':')
         mail = self.maildir.get(mail_id)
+        assert mail is not None
+
         notify.send('new_mail', 'From: {}\nSubject: {}'.format(mail.get('From'), mail.get('Subject')))
 
 
