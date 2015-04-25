@@ -1,0 +1,6 @@
+# toggle if sounds are played
+sounds = False
+
+# command to be run to play incoming message sound
+# sound_cmd = 'aplay /usr/share/sounds/alsa/Front_Center.wav'
+sound_cmd = None
