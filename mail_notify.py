@@ -2,6 +2,7 @@
 
 import argparse
 import imp
+import logging
 import sys
 import os
 
@@ -13,7 +14,14 @@ def main(argv):
     parser = argparse.ArgumentParser('mail_notify')
     parser.add_argument('maildir')
     parser.add_argument('--config', '-c', help="configuration file")
+    parser.add_argument('--verbose', '-v', help="make me verbose", action='store_true')
+    parser.add_argument('--debug', help="make me very verbose", action='store_true')
     args = parser.parse_args(argv)
+
+    if args.verbose:
+        logging.basicConfig(level=logging.INFO)
+    if args.debug:
+        logging.basicConfig(level=logging.NOTSET)
 
     basedir = os.path.dirname(__file__)
     config.override(imp.load_source('config', os.path.join(basedir, 'default_config')).__dict__)
