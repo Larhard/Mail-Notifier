@@ -15,7 +15,7 @@ TARGETS = \
 	default_config \
 
 EXECUTABLES = \
-	maildir-notifier.sh \
+	maildir-notifier \
 
 all: $(TARGETS)
 
