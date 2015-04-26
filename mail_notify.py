@@ -18,10 +18,14 @@ def main(argv):
     parser.add_argument('--debug', help="make me very verbose", action='store_true')
     args = parser.parse_args(argv)
 
+    logger_level = logging.WARNING
+    logger_format = '%(levelname)s: %(message)s'
     if args.verbose:
-        logging.basicConfig(level=logging.INFO)
+        logger_level = logging.INFO
     if args.debug:
-        logging.basicConfig(level=logging.NOTSET)
+        logger_level = logging.NOTSET
+        logger_format = '%(asctime)-15s: %(name)s: %(levelname)s: %(message)s'
+    logging.basicConfig(format=logger_format, level=logger_level)
 
     basedir = os.path.dirname(__file__)
     config.override(imp.load_source('config', os.path.join(basedir, 'default_config')).__dict__)
