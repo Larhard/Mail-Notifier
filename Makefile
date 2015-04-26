@@ -13,6 +13,7 @@ TARGETS = \
 	watcher.py \
 	config.py \
 	default_config \
+	maildir-notifier \
 
 EXECUTABLES = \
 	maildir-notifier \
@@ -22,7 +23,6 @@ all: $(TARGETS)
 install::
 	$(MKDIR) $(target_dir) $(bin_dir)
 	$(CP) $(TARGETS) $(target_dir)
-	$(CP) $(EXECUTABLES) $(target_dir)
 	for i in $(EXECUTABLES) ; do \
 		chmod +x $(target_dir)/$$i; \
 		$(LN) $(target_dir)/$$i $(bin_dir)/$$i; \
