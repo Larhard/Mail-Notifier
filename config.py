@@ -1,5 +1,3 @@
-import imp
-
 __old_globals = None
 __old_globals = set(globals().keys())
 
