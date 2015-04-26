@@ -1,6 +1,7 @@
 #!/bin/env python3
 
 import argparse
+import imp
 import sys
 import os
 
@@ -15,9 +16,9 @@ def main(argv):
     args = parser.parse_args(argv)
 
     basedir = os.path.dirname(__file__)
-    config.override(os.path.join(basedir, 'default_config'))
+    config.override(imp.load_source('config', os.path.join(basedir, 'default_config')).__dict__)
     if args.config:
-        config.override(args.config)
+        config.override(imp.load_source('config', args.config).__dict__)
 
     watcher.watch_maildir(args.maildir)
 
