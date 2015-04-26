@@ -1,8 +1,11 @@
 import email.header
+import logging
 import pyinotify
 import re
 import notify
 import mailbox
+
+logger = logging.getLogger('watcher')
 
 
 def decode_header(header):
@@ -19,10 +22,14 @@ class MailEventHandler(pyinotify.ProcessEvent):
         self.pevent = lambda event: not re.match('.*:.*', event.name)
 
     def process_IN_CREATE(self, event):
+        logger.debug('"{}" created'.format(event.name))
+
         self.new_mails.add(event.name)
 
     def process_IN_CLOSE_WRITE(self, event):
         if event.name in self.new_mails:
+            logger.debug('"{}" written'.format(event.name))
+
             self.new_mails.remove(event.name)
 
             self.new_mail_notify(event.name)
@@ -39,6 +46,8 @@ class MailEventHandler(pyinotify.ProcessEvent):
 
 
 def watch_maildir(maildir):
+    logger.info('watching "{}"'.format(maildir))
+
     notify.init('mail notifier')
 
     watch_manager = pyinotify.WatchManager()
@@ -49,3 +58,4 @@ def watch_maildir(maildir):
     watch_manager.add_watch(maildir, pyinotify.IN_CREATE | pyinotify.IN_CLOSE_WRITE, rec=True)
 
     notifier.loop()
+    logger.info('exit')
