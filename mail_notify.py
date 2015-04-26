@@ -20,6 +20,8 @@ def main(argv):
     if args.config:
         config.override(imp.load_source('config', args.config).__dict__)
 
+    config.override(args.__dict__)
+
     watcher.watch_maildir(args.maildir)
 
 
