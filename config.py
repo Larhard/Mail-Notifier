@@ -10,5 +10,5 @@ CONFIG_VARS = globals().keys() - __old_globals
 
 
 def override(config):
-    for variable in CONFIG_VARS and config.keys():
+    for variable in CONFIG_VARS & config.keys():
         globals()[variable] = config[variable]
